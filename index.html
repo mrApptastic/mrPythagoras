@@ -1,0 +1,163 @@
+<html lang="en">
+<head>
+<title>Pythagoras Mathematical Proof</title>
+<style>
+
+body {
+	padding: 0;
+	margin: 0;
+}
+
+svg#pyth {
+	width: 100vw;
+	height: 100vh;
+	cursor: none;
+}
+
+svg#pyth g.toolTipArea path {
+	stroke: red;
+	stroke-width: 1;
+	fill: none;
+}
+
+svg#pyth g.toolTipArea circle {
+	stroke: red;
+	stroke-width: 1;
+	fill: red;
+}
+
+svg#pyth g.toolTipArea line {
+	stroke: red;
+	stroke-width: 1;
+}
+
+svg#pyth g.drawingArea path {
+	stroke: green;
+	stroke-width: 3;
+	fill: none;
+}
+</style>
+</head>
+<body>
+<svg id="pyth">
+<g class="infoArea"></g>
+<g class="toolTipArea"></g>
+<g class="drawingArea"></g>
+</svg>
+<script>
+const pyth = document.getElementById("pyth");
+const info = pyth.getElementsByClassName("infoArea")[0];
+const tool = pyth.getElementsByClassName("toolTipArea")[0];
+const draw = pyth.getElementsByClassName("drawingArea")[0];
+const template = function() {
+	return {
+		a: null,
+		aa: null,
+		ax : null,
+		ay : null,
+		b : null,
+		ba: null,
+		bx : null,
+		by : null,
+		c: null,
+		ca: null,
+		cx : null,
+		cy : null
+	};
+};
+let triangle = new template(); 
+
+pyth.onclick = (evt) => {
+	const x = evt.clientX;
+	const y = evt.clientY;
+	
+	if (triangle.bx && triangle.by) {
+		// triangle.ax = x;
+		// triangle.ay = y;
+	} else if (triangle.cx && triangle.cy) {
+		triangle.bx = x;
+		triangle.by = y;
+		triangle.a = calculateDistance(triangle.cx, triangle.cy, triangle.bx, triangle.by);
+	} else {
+		triangle.cx = x;
+		triangle.cy = y;
+	}
+
+	
+	updateToolTip(x, y);
+	
+	/*
+	if (triangle.x3 && triangle.y3) {
+		draw.innerHTML = "";
+		triangle= JSON.parse(JSON.stringify(template)); 
+		triangle.x1 = x;
+		triangle.y1 = y;
+
+	} else if (triangle.x2 && triangle.y2) {
+		triangle.x3 = x;
+		triangle.y3 = y;
+		draw.innerHTML = "<path d='M" + triangle.x1 + " " + triangle.y1 + " L" + triangle.x2 + " " + triangle.y2 + " L" + triangle.x3 + " " + triangle.y3 + " Z' />";
+	} else if (triangle.x1 && triangle.y1) {
+		triangle.x2 = x;
+		triangle.y2 = y;
+	} else {
+
+		triangle.x1 = x;
+		triangle.y1 = y;
+	}
+	
+	updateToolTip(x, y);
+	*/	
+};
+
+pyth.onmousemove = (evt) => {
+	const x = evt.clientX;
+	const y = evt.clientY;
+	updateToolTip(x, y);	
+};
+
+updateToolTip = (x, y) => {
+	tool.innerHTML = "<circle cx='" + x + "' cy='" + y + "' r='5' />";
+	
+	if (triangle.cx && triangle.cy) {
+		tool.innerHTML += "<line x1='" + triangle.bx + "' y1='" + triangle.by + "' x2='" + triangle.cx  + "' y2='" + triangle.cy + "' />";
+		tool.innerHTML += "<line x1='" + triangle.cx + "' y1='" + triangle.cy + "' x2='" + x + "' y2='" + y + "' />";
+	} else if (triangle.bx && triangle.by) {
+		tool.innerHTML += "<line x1='" + triangle.bx + "' y1='" + triangle.by + "' x2='" + x + "' y2='" + y  + "' />";
+	} 
+
+};
+
+updateToolTip2 = (x, y) => {
+	while (tool.firstChild) {
+		tool.removeChild(tool.lastChild);
+	}
+	tool.appendChild(getCircle(x, y, 5));
+	// tool.innerHTML = "<circle cx='" + x + "' cy='" + y + "' r='5' />";
+	console.log(calculateDistance(triangle.cx, triangle.cy, x, y));
+	/*
+	if (triangle.x2 && triangle.y2) {
+		tool.innerHTML = "<path d='M" + triangle.cx + " " + triangle.cy + " L" + triangle.bx + " " + triangle.by + " L" + x + " " + y + " Z' />";
+	} else if (triangle.x1 && triangle.y1) {
+		tool.innerHTML = "<path d='M" + triangle.cx + " " + triangle.cy + "' />";
+	}
+	*/
+};
+
+getCircle = (x, y, r) => {
+	const circle = document.createElement("circle");
+	circle.setAttribute("cx", x);
+	circle.setAttribute("cy", y);
+	circle.setAttribute("r", r);
+	return circle;
+}
+
+calculateDistance = (x1, y1, x2, y2) => {
+	const ib = Math.pow((x2 - x1), 2);
+	const bo = Math.pow((y2 - y1), 2);
+	return Math.sqrt(ib + bo);
+}
+
+</script>
+</body>
+</html>
