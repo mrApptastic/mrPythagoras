@@ -72,8 +72,8 @@ pyth.onclick = (evt) => {
 	const y = evt.clientY;
 	
 	if (triangle.bx && triangle.by) {
-		// triangle.ax = x;
-		// triangle.ay = y;
+		triangle.ax = x;
+		triangle.ay = y;
 	} else if (triangle.cx && triangle.cy) {
 		triangle.bx = x;
 		triangle.by = y;
@@ -150,13 +150,13 @@ getCircle = (x, y, r) => {
 	circle.setAttribute("cy", y);
 	circle.setAttribute("r", r);
 	return circle;
-}
+};
 
 calculateDistance = (x1, y1, x2, y2) => {
 	const ib = Math.pow((x2 - x1), 2);
 	const bo = Math.pow((y2 - y1), 2);
 	return Math.sqrt(ib + bo);
-}
+};
 
 </script>
 </body>
